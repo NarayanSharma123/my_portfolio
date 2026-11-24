@@ -1,125 +1,98 @@
-import React, { useState } from "react";
-import myImg from "/public/pics/myImg.png";
+import React from "react";
+import { FaGithub, FaLinkedin, FaWhatsapp, FaYoutube } from "react-icons/fa";
+import axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
+import iconMap from "../utils/iconMap";
+import { FiArrowUpRight, FiBriefcase } from "react-icons/fi";
 
 const Contacts = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [contacts, setContacts] = useState({});
 
-  const [isShow, setIsShow] = useState(false);
+  useEffect(() => {
+    const GetContactsSection = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/contacts-section`,
+        );
 
-  const isSubmit = (e) => {
-    e.preventDefault();
-    setIsShow(true);
-  };
+        setContacts(res.data.contacts);
+      } catch (error) {
+        console.log("Get contacts error: ", error);
+      }
+    };
+
+    GetContactsSection();
+  }, []);
+
+  const OpportunityIcon = iconMap[contacts?.opportunity?.icon] || FiBriefcase;
 
   return (
     <section
       id="contact"
-      className="w-full min-h-screen bg-[#020617] text-white flex items-center justify-center px-6 md:px-16 lg:px-24 py-20"
+      className="bg-[#0F172A] px-5 py-24 text-white sm:px-8 lg:px-16"
     >
-      {isShow && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="bg-[#0f172a] border border-teal-500 rounded-2xl p-6 w-[90%] max-w-lg shadow-2xl">
-            <h2 className="text-2xl font-bold text-teal-400 mb-4">
-              Contact Form Demo
-            </h2>
-
-            <textarea
-              rows="8"
-              readOnly
-              value={`Thank you, ${firstName} ${lastName}!
-
-              This contact form is currently a portfolio demonstration.
-
-              Name: ${firstName} ${lastName}
-              Email: ${email}
-              Message: ${message}
-
-              Backend integration is not enabled yet.`}
-              className="w-full bg-transparent text-white border border-gray-600 rounded-lg p-3 resize-none outline-none"
-            />
-
-            <div className="flex justify-end mt-5">
-              <button
-                onClick={() => setIsShow(false)}
-                className="px-6 py-2 bg-teal-500 rounded-lg hover:bg-teal-600"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="max-w-6xl w-full mx-auto flex flex-col md:flex-row items-center gap-16">
-        {/* Left Side */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center items-start text-center md:text-left">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Get in <span className="text-teal-400">Touch</span>
-          </h2>
-          <p className="text-gray-300 text-lg mb-8">
-            Have questions, ideas, or collaboration opportunities? We’d love to
-            hear from you. Fill out the form and we’ll respond as soon as
-            possible.
+      <div className="mx-auto max-w-7xl">
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
+            Contact
           </p>
 
-          <img
-            src={myImg}
-            alt="Contact illustration"
-            className="w-64 h-64 object-cover rounded-full border-4 border-teal-500 shadow-lg hover:scale-105 transition-transform duration-300 mx-auto md:mx-0"
-          />
+          <h2 className="text-3xl font-bold sm:text-4xl">Let's Connect</h2>
+
+          <p className="mt-5 text-base leading-8 text-slate-400">
+            I'm open to internship opportunities, professional connections, and
+            meaningful collaborations. Feel free to reach out through any of the
+            platforms below.
+          </p>
         </div>
 
-        {/* Right Side - Form */}
-        <div className="w-full md:w-1/2 bg-[#0f172a] p-8 rounded-2xl shadow-lg border border-teal-500/30 hover:border-teal-400 transition-all duration-300">
-          <form className="flex flex-col gap-5">
-            {/* Name Fields */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <input
-                type="text"
-                name="firstName"
-                placeholder="First Name"
-                className="w-full sm:w-1/2 px-4 py-3 rounded-lg bg-transparent border border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Last Name"
-                className="w-full sm:w-1/2 px-4 py-3 rounded-lg bg-transparent border border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </div>
+        <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2">
+          {contacts?.contacts?.map((item) => {
+            const Icon = iconMap[item.icon];
 
-            {/* Email */}
-            <input
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              className="w-full px-4 py-3 rounded-lg bg-transparent border border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            return (
+              <a
+                key={item?.title}
+                href={item?.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-5 rounded-xl border border-slate-700/70 bg-[#111827] p-6 transition-colors hover:border-blue-400/60"
+              >
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-blue-400/10 text-blue-400 transition-colors group-hover:bg-blue-400/20">
+                  {Icon && <Icon className="h-7 w-7" />}
+                </div>
 
-            {/* Message */}
-            <textarea
-              name="message"
-              rows="5"
-              placeholder="Write your message..."
-              className="w-full px-4 py-3 rounded-lg bg-transparent border border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all resize-none"
-              onChange={(e) => setMessage(e.target.value)}
-            ></textarea>
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-lg font-semibold text-white">
+                    {item?.title}
+                  </h3>
 
-            {/* Button */}
-            <button
-              // type="submit"
-              className="mt-3 w-full sm:w-auto px-8 py-3 rounded-lg bg-teal-500 font-semibold text-white shadow-md hover:bg-teal-600 hover:shadow-teal-500/30 active:scale-95 transition-all duration-300 cursor-pointer"
-              onClick={isSubmit}
-            >
-              Send Message
-            </button>
-          </form>
+                  <p className="mt-1 text-sm text-slate-400">
+                    {item?.description}
+                  </p>
+
+                  <p className="mt-3 text-sm font-medium text-blue-400">
+                    {item?.linkText}
+                  </p>
+                </div>
+
+                <FiArrowUpRight className="h-5 w-5 shrink-0 text-slate-500 transition-colors group-hover:text-blue-400" />
+              </a>
+            );
+          })}
+        </div>
+
+        <div className="mx-auto mt-12 max-w-5xl rounded-xl border border-blue-400/20 bg-blue-400/5 p-7 text-center sm:p-9">
+          <OpportunityIcon className="mx-auto h-8 w-8 text-blue-400" />
+
+          <h3 className="mt-4 text-xl font-semibold text-white">
+            {contacts?.opportunity?.heading}
+          </h3>
+
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-slate-400">
+            {contacts?.opportunity?.description}
+          </p>
         </div>
       </div>
     </section>

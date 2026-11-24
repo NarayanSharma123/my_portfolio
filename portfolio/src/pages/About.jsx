@@ -1,72 +1,75 @@
 import React from "react";
-import myImg from "/public/pics/myImg.png";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 
 const About = () => {
+  const [about, setAbout] = useState({});
+
+  useEffect(() => {
+    const GetAboutSection = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/about-section`,
+        );
+
+        setAbout(res.data.about);
+      } catch (error) {
+        console.log("Get About error: ", error);
+      }
+    };
+
+    GetAboutSection();
+  }, []);
+
   return (
     <section
       id="about"
-      className="w-full min-h-screen bg-[#020617] text-white flex items-center justify-center px-6 md:px-16 lg:px-24 py-20"
+      className="bg-[#0F172A] px-5 py-24 text-white sm:px-8 lg:px-16"
     >
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10">
-        {/* Left Side - Image */}
-        <div className="w-full md:w-1/2 flex justify-center">
-          <img
-            src={myImg}
-            alt="About Me"
-            className="w-64 sm:w-72 md:w-80 rounded-2xl border-4 border-teal-500 shadow-lg shadow-teal-500/30 hover:scale-105 transition-all duration-500"
-          />
+      <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-2">
+        <div>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
+            Get to know me
+          </p>
+
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            About Me
+          </h2>
+
+          <div className="mt-6 space-y-5 text-base leading-8 text-slate-400">
+            {about?.aboutMe?.split(/\n\s*\n/).map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
+
+          <a
+            href="#skills"
+            className="mt-8 inline-flex items-center gap-2 font-semibold text-blue-400 transition hover:text-blue-300"
+          >
+            Explore My Technical Skills
+            <ArrowRightIcon className="h-5 w-5" />
+          </a>
         </div>
 
-        {/* Right Side - Content */}
-        <div className="w-full md:w-1/2">
-          <h2 className="text-4xl font-bold mb-4 text-white">
-            About <span className="text-teal-400">Me</span>
-          </h2>
-          <p className="text-teal-400 text-lg font-semibold mb-2">
-            Full Stack (MERN) Developer | Tech Enthusiast
-          </p>
-
-          <p className="text-gray-300 text-lg leading-relaxed mb-4">
-            I'm a passionate{" "}
-            <span className="text-teal-400 font-medium">
-              Full Stack (MERN) Developer
-            </span>{" "}
-            who loves building powerful, efficient, and user-focused web
-            applications. My goal is to create seamless digital experiences by
-            combining beautiful frontend design with robust backend
-            architecture.
-          </p>
-
-          <p className="text-gray-300 text-lg leading-relaxed mb-4">
-            I specialize in developing{" "}
-            <span className="text-teal-400 font-medium">
-              end-to-end web solutions
-            </span>{" "}
-            using modern technologies that ensure performance, scalability, and
-            clean code practices.
-          </p>
-
-          <p className="text-gray-300 text-lg leading-relaxed">
-            I work primarily with{" "}
-            <span className="text-teal-400 font-medium">React.js</span> for
-            frontend and{" "}
-            <span className="text-teal-400 font-medium">
-              Node.js, Express.js
-            </span>
-            , and <span className="text-teal-400 font-medium">MongoDB</span> for
-            backend development. I’m always eager to learn new technologies and
-            improve my problem-solving skills to stay ahead in the ever-evolving
-            web ecosystem.
-          </p>
-
-          <div className="mt-6">
-            <a
-              href="#skills"
-              className="inline-block px-6 py-2 bg-teal-500 text-white font-semibold rounded-lg shadow-md hover:bg-teal-600 hover:shadow-teal-500/30 transition-all duration-300"
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {about?.highlights?.map((item) => (
+            <div
+              key={item.title}
+              className="rounded-xl border border-slate-700/70 bg-[#111827] p-6 transition-colors hover:border-blue-400/50"
             >
-              View My Skills
-            </a>
-          </div>
+              <div className="mb-5 h-1 w-10 rounded-full bg-blue-400" />
+
+              <h3 className="text-lg font-semibold text-slate-100">
+                {item.title}
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-slate-400">
+                {item.description}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

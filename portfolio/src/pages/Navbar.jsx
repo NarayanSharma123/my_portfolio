@@ -8,7 +8,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: "Home", href: "#" },
+    { name: "Home", href: "#home" },
     { name: "About", href: "#about" },
     { name: "Services", href: "#services" },
     { name: "Skills", href: "#skills" },
@@ -18,84 +18,94 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-black/95 backdrop-blur-sm border-b border-gray-800">
+    <header className="fixed top-0 z-50 w-full border-b border-slate-800/80 bg-[#0B1120]/95 backdrop-blur-xl">
       <nav
         aria-label="Global"
-        className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8"
+        className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8"
       >
-        {/* Logo */}
-        <div className="flex items-center">
-          <a
-            href="#"
-            className="text-2xl font-semibold text-white hover:text-teal-400 transition-all"
-          >
-            Portfolio<span className="text-teal-500">.</span>
-          </a>
-        </div>
+        <a
+          href="#home"
+          className="text-2xl font-bold tracking-tight text-white"
+        >
+          Portfolio<span className="text-blue-400">.</span>
+        </a>
 
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex lg:gap-x-8">
+        <div className="hidden items-center gap-7 lg:flex">
           {navLinks.map((item) => (
             <a
               key={item.name}
               href={item.href}
-              className="text-white text-[17px] font-medium hover:text-teal-400 transition-all duration-300 relative group"
+              className="text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-blue-400"
             >
               {item.name}
-              <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
             </a>
           ))}
         </div>
 
-        {/* Mobile Menu Button */}
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="inline-flex items-center justify-center rounded-md p-2 text-gray-300 hover:text-white hover:bg-gray-800 focus:outline-none"
-          >
-            <Bars3Icon className="h-6 w-6" />
-          </button>
-        </div>
+        <a
+          href="#contact"
+          className="hidden rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600 lg:inline-flex"
+        >
+          Let's Connect
+        </a>
+
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(true)}
+          className="rounded-lg border border-slate-700 p-2 text-slate-200 transition hover:bg-slate-800 lg:hidden"
+          aria-label="Open navigation menu"
+        >
+          <Bars3Icon className="h-6 w-6" />
+        </button>
       </nav>
 
-      {/* Mobile Menu Drawer */}
       <Dialog
         as="div"
         open={mobileMenuOpen}
         onClose={setMobileMenuOpen}
-        className="lg:hidden"
+        className="relative z-50 lg:hidden"
       >
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
-        <Dialog.Panel className="fixed top-0 right-0 z-50 w-64 h-full bg-[#0d0d0d] p-6 shadow-lg ring-1 ring-gray-800 transition-all duration-300">
-          <div className="flex items-center justify-between mb-6">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" />
+
+        <Dialog.Panel className="fixed inset-y-0 right-0 w-full max-w-xs border-l border-slate-800 bg-[#0B1120] p-6 shadow-2xl">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-5">
             <a
-              href="#"
-              className="text-2xl font-semibold text-white hover:text-teal-400"
-            >
-              Portfolio<span className="text-teal-500">.</span>
-            </a>
-            <button
-              type="button"
+              href="#home"
               onClick={() => setMobileMenuOpen(false)}
-              className="rounded-md p-2 text-gray-400 hover:text-white hover:bg-gray-800"
+              className="text-2xl font-bold text-white"
+            >
+              Portfolio<span className="text-blue-400">.</span>
+            </a>
+
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white"
+              aria-label="Close navigation menu"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
           </div>
 
-          <div className="space-y-4">
+          <div className="mt-8 flex flex-col gap-2">
             {navLinks.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-800 hover:text-teal-400 transition-all duration-300"
+                className="rounded-lg px-4 py-3 text-base font-medium text-slate-300 transition hover:bg-slate-800 hover:text-blue-400"
               >
                 {item.name}
               </a>
             ))}
           </div>
+
+          <a
+            href="#contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="mt-8 block rounded-lg bg-blue-500 px-5 py-3 text-center font-semibold text-white hover:bg-blue-600"
+          >
+            Let's Connect
+          </a>
         </Dialog.Panel>
       </Dialog>
     </header>

@@ -1,60 +1,68 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import iconMap from "../utils/iconMap";
+import axios from "axios";
 
 const Services = () => {
-  const services = [
-    {
-      title: "Full Stack Web Development",
-      description:
-        "Building complete MERN stack applications with fast performance, modern UI, and robust backend APIs.",
-    },
-    {
-      title: "Frontend Engineering",
-      description:
-        "Crafting responsive, elegant, and user-friendly interfaces using React and Tailwind CSS.",
-    },
-    {
-      title: "Backend API Development",
-      description:
-        "Developing secure, scalable REST APIs with Node.js, Express, and MongoDB for seamless data flow.",
-    },
-    {
-      title: "Cloud & Deployment",
-      description:
-        "Deploying production-ready apps on Vercel, Render, or Railway with optimized performance and cloud storage integration.",
-    },
-    {
-      title: "Authentication & Security Systems",
-      description:
-        "Implementing secure logins with JWT, bcrypt, and OAuth to ensure safe and reliable user experiences.",
-    },
-  ];
+  const [services, setServices] = useState({});
+
+  useEffect(() => {
+    const GetServicesSection = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/services-section`,
+        );
+        setServices(res.data.services);
+      } catch (error) {
+        console.log("Get services error: ", error);
+      }
+    };
+
+    GetServicesSection();
+  }, []);
 
   return (
     <section
       id="services"
-      className="min-h-screen bg-[#020617] text-white px-6 md:px-20 py-20"
+      className="bg-[#0B1120] px-5 py-24 text-white sm:px-8 lg:px-16"
     >
-      <div className="max-w-5xl mx-auto text-center">
-        <h1 className="text-4xl font-bold mb-4">
-          My <span className="text-teal-400">Services</span>
-        </h1>
-        <p className="text-gray-400 mb-12">
-          Here are some of the services I offer as a web developer and designer.
-        </p>
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-14 max-w-2xl">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
+            What I Work On
+          </p>
 
-        <div className="w-full grid gap-8 md:grid-cols-2">
-          {/* services */}
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="bg-[#111827] p-6 rounded-lg shadow-lg hover:shadow-teal-400 transition-shadow"
-            >
-              <h2 className="text-2xl font-semibold mb-3 text-teal-400">
-                {service.title}
-              </h2>
-              <p className="text-gray-300">{service.description}</p>
-            </div>
-          ))}
+          <h2 className="text-3xl font-bold sm:text-4xl">
+            {services?.heading}
+          </h2>
+
+          <p className="mt-4 leading-7 text-slate-400">
+            {services?.description}
+          </p>
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {services?.services?.map((service) => {
+            const Icon = iconMap[service?.icon];
+
+            return (
+              <div
+                key={service?.title}
+                className="rounded-xl border border-slate-800 bg-[#111827] p-7 transition-colors duration-300 hover:border-blue-400/50"
+              >
+                <div className="mb-6 inline-flex rounded-lg border border-blue-400/20 bg-blue-400/10 p-3 text-blue-400">
+                  <Icon className="h-7 w-7" />
+                </div>
+
+                <h3 className="text-xl font-semibold text-slate-100">
+                  {service?.title}
+                </h3>
+
+                <p className="mt-3 text-sm leading-7 text-slate-400">
+                  {service?.description}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

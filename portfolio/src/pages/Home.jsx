@@ -1,56 +1,108 @@
-import React from "react";
-import { ArrowDownTrayIcon } from "@heroicons/react/24/solid";
-import myImg from "/public/pics/myImg.png";
+import React, { useEffect, useState } from "react";
+import { ArrowDownTrayIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
 import MyResume from "../assets/my_Resume.pdf";
+import { FiFile, FiFileText } from "react-icons/fi";
 
 const Home = () => {
+  const [hero, setHero] = useState({});
+
+  useEffect(() => {
+    const GetHeroSection = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/hero-section`,
+        );
+
+        setHero(res.data.hero);
+      } catch (error) {
+        console.log("Get Hero error: ", error);
+      }
+    };
+
+    GetHeroSection();
+  }, []);
+
   return (
     <section
       id="home"
-      className="w-full min-h-screen flex flex-col-reverse md:flex-row items-center justify-between px-6 md:px-16 lg:px-24 bg-[#020617] text-white pt-24"
+      className="flex min-h-screen items-center bg-[#0B1120] px-5 pb-16 pt-28 text-white sm:px-8 lg:px-16"
     >
-      {/* Left Content */}
-      <div className="flex flex-col gap-5 max-w-xl mt-10 md:mt-0">
-        <p className="text-teal-400 font-medium text-lg tracking-wide">
-          Hi, I’m
-        </p>
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-          Narayan <span className="text-teal-400">Bhojak</span>
-        </h1>
-        <p className="text-gray-300 text-lg max-w-md">
-          A passionate{" "}
-          <span className="text-teal-400">Full Stack (MERN) Developer</span>{" "}
-          dedicated to building modern, scalable, and user-focused web
-          applications using cutting-edge technologies.
-        </p>
+      <div className="mx-auto grid w-full max-w-7xl items-center gap-14 lg:grid-cols-2 lg:gap-20">
+        <div className="order-2 lg:order-1">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/5 px-4 py-2">
+            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            <span className="text-sm font-medium text-blue-300">
+              {hero?.availabilityText}
+            </span>
+          </div>
 
-        <div className="flex gap-4 mt-4">
-          <a
-            href="#projects"
-            className="px-5 py-2 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-all duration-300 shadow-md hover:shadow-teal-500/30"
-          >
-            View Projects
-          </a>
-          <a
-            href={MyResume}
-            download="Narayan-Bhojak-Portfolio"
-            className="px-5 py-2 border-2 border-teal-500 text-teal-400 font-semibold rounded-lg flex items-center gap-2 hover:bg-teal-500 hover:text-white transition-all duration-300"
-          >
-            <ArrowDownTrayIcon className="h-5 w-5" />
-            Resume
-          </a>
+          <p className="mb-3 text-lg font-medium text-slate-400">Hello, I'm</p>
+
+          <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+            {hero?.firstName}
+            <span className="mt-1 block text-blue-400"> {hero?.lastName}</span>
+          </h1>
+
+          <h2 className="mt-6 text-xl font-semibold text-slate-200 sm:text-2xl">
+            {hero?.designation}
+          </h2>
+
+          <p className="mt-5 max-w-xl text-base leading-8 text-slate-400 sm:text-lg break-all">
+            {hero?.description}
+          </p>
+
+          <div className="mt-9 flex flex-wrap gap-4">
+            <a
+              href="#projects"
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-500 px-6 py-3 font-semibold text-white transition hover:bg-blue-600"
+            >
+              Explore Projects
+              <ArrowRightIcon className="h-5 w-5" />
+            </a>
+
+            {hero?.resume && (
+              <a
+                href={hero?.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-6 py-3 font-semibold text-slate-200 transition hover:border-blue-400 hover:bg-blue-400/10 hover:text-blue-300"
+              >
+                <FiFileText className="h-5 w-5" />
+                View Resume
+              </a>
+            )}
+          </div>
+
+          <div className="mt-12 flex flex-wrap gap-8 border-t border-slate-800 pt-7">
+            {hero?.heroStats?.map((stat, index) => (
+              <div key={index}>
+                <p className="text-sm text-slate-500">{stat?.label}</p>
+                <p className="mt-1 font-semibold text-slate-200">
+                  {stat?.value}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Right Content (Profile Image) */}
-      <div className="flex justify-center items-center w-full md:w-[45%]">
-        <div className="relative">
-          <img
-            src={myImg}
-            alt="Profile"
-            className="w-60 sm:w-72 md:w-80 rounded-full border-4 border-teal-500 shadow-lg shadow-teal-500/30 hover:scale-105 transition-all duration-500"
-          />
-          <div className="absolute inset-0 rounded-full border-2 border-teal-400 animate-pulse"></div>
+        <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
+          <div className="relative">
+            <div className="absolute -inset-4 rounded-2xl border border-blue-400/20" />
+
+            <img
+              src={hero?.profileImage}
+              alt={`${hero?.firstName} ${hero?.lastName} - ${hero?.designation}`}
+              className="relative h-72 w-72 rounded-2xl border border-slate-700 object-cover shadow-2xl sm:h-96 sm:w-96"
+            />
+
+            <div className="absolute -bottom-5 -left-5 rounded-xl border border-slate-700 bg-[#111827] px-5 py-4 shadow-xl sm:-left-10">
+              <p className="text-sm text-slate-400">Building with</p>
+              <p className="mt-1 font-semibold text-blue-400">
+                Passion & Purpose
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
