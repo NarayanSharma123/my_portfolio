@@ -30,7 +30,6 @@ export const AddSkillsByAdmin = async (req, res) => {
     const { categories } = req.body;
 
     const id = req.params;
-    console.log("ID: ", id);
 
     if (!categories) {
       res

@@ -6,10 +6,13 @@ import { FiFile, FiFileText } from "react-icons/fi";
 
 const Home = () => {
   const [hero, setHero] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const GetHeroSection = async () => {
       try {
+        setLoading(true);
+
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/hero-section`,
         );
@@ -17,6 +20,8 @@ const Home = () => {
         setHero(res.data.hero);
       } catch (error) {
         console.log("Get Hero error: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 

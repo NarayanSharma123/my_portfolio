@@ -6,10 +6,12 @@ import axios from "axios";
 
 const About = () => {
   const [about, setAbout] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const GetAboutSection = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/about-section`,
         );
@@ -17,6 +19,8 @@ const About = () => {
         setAbout(res.data.about);
       } catch (error) {
         console.log("Get About error: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 

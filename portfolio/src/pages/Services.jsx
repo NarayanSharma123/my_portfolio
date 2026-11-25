@@ -4,16 +4,21 @@ import axios from "axios";
 
 const Services = () => {
   const [services, setServices] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const GetServicesSection = async () => {
       try {
+        setLoading(true);
+
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/services-section`,
         );
         setServices(res.data.services);
       } catch (error) {
         console.log("Get services error: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 

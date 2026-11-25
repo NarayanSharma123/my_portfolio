@@ -5,10 +5,13 @@ import { useState } from "react";
 
 const Policy = () => {
   const [privacy, setPrivacy] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const GetPrivacySection = async () => {
       try {
+        setLoading(true);
+
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/privacy-section`,
         );
@@ -17,6 +20,8 @@ const Policy = () => {
         console.log("privacy: ", res.data.privacy);
       } catch (error) {
         console.log("Get privacy error: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 

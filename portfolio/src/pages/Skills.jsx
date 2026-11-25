@@ -3,10 +3,13 @@ import React, { useEffect, useState } from "react";
 
 const Skills = () => {
   const [skills, setSkills] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const GetSkillsSection = async () => {
       try {
+        setLoading(true);
+
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/skills-section`,
         );
@@ -14,6 +17,8 @@ const Skills = () => {
         setSkills(res.data.skills);
       } catch (error) {
         console.log("Get skills error: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 

@@ -42,7 +42,6 @@ export const adminLogin = async (req, res) => {
       { expiresIn: "1d" },
     );
 
-    console.log("Admin login successful");
     return res.status(200).json({
       success: true,
       message: "Admin login successful",

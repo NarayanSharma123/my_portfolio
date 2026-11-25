@@ -62,11 +62,6 @@ const uploadToCloudinary = (file, options) => {
       },
     );
 
-    console.log("File Name:", file.originalname);
-    console.log("File Type:", file.mimetype);
-    console.log("File Size:", file.size);
-    console.log("Buffer Exists:", !!file.buffer);
-
     uploadStream.end(file.buffer);
   });
 };
@@ -106,7 +101,6 @@ export const AddHeroByAdmin = async (req, res) => {
 
     let profileImage = existingHero?.profileImage || "";
     let resumeUrl = existingHero?.resume || existingResume || "";
-    console.log("Uploading Profile Image...");
 
     if (profileImageFile) {
       const imageResult = await uploadToCloudinary(profileImageFile, {
@@ -116,8 +110,6 @@ export const AddHeroByAdmin = async (req, res) => {
 
       profileImage = imageResult.secure_url;
     }
-
-    console.log("Uploading Resume PDF...");
 
     if (resumeFile) {
       const safeFileName = resumeFile.originalname
@@ -164,17 +156,10 @@ export const AddHeroByAdmin = async (req, res) => {
       hero: heroSection,
     });
   } catch (error) {
-    console.log("========== CLOUDINARY UPLOAD ERROR ==========");
-    console.log("Message:", error.message);
-    console.log("HTTP Code:", error.http_code);
-    console.log("Name:", error.name);
-    console.log("Full Error:", error);
-
     return res.status(500).json({
       success: false,
       message:
         error.message || "Something went wrong, can't save Hero section.",
-      cloudinaryCode: error.http_code,
     });
   }
 };

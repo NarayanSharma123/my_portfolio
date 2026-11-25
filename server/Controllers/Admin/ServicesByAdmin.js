@@ -30,7 +30,6 @@ export const AddServicesByAdmin = async (req, res) => {
     const { heading, description, services } = req.body;
 
     const id = req.params;
-    console.log("ID: ", id);
 
     if (!heading || !description || !services) {
       res

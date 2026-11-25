@@ -30,7 +30,6 @@ export const AddProjectsByAdmin = async (req, res) => {
     const { projects } = req.body;
 
     const id = req.params;
-    console.log("ID: ", id);
 
     if (!projects) {
       res

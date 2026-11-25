@@ -30,7 +30,6 @@ export const AddAboutByAdmin = async (req, res) => {
     const { aboutMe, highlights } = req.body;
 
     const id = req.params;
-    console.log("ID: ", id);
 
     if (!aboutMe || !highlights) {
       res

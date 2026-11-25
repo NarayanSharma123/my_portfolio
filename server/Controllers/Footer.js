@@ -24,39 +24,3 @@ export const GetFooter = async (req, res) => {
     });
   }
 };
-
-export const AddFooter = async (req, res) => {
-  try {
-    const { socialLinks } = req.body;
-
-    const id = req.params;
-
-    if (!socialLinks) {
-      res
-        .status(400)
-        .json({ success: false, message: "Please fill all required fields." });
-    }
-
-    const footerSection = await Footer.findOneAndUpdate(
-      id,
-      {
-        $set: {
-          socialLinks,
-        },
-      },
-      { returnDocument: "after", upsert: true },
-    );
-
-    res.status(201).json({
-      success: true,
-      message: "Successfully add Footer Section.",
-      footer: footerSection,
-    });
-  } catch (error) {
-    console.log("Add Footer section: ", error);
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong, Can't add Footer section.",
-    });
-  }
-};

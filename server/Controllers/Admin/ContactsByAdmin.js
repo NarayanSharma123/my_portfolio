@@ -30,7 +30,6 @@ export const AddContactByAdmin = async (req, res) => {
     const { contacts, opportunity } = req.body;
 
     const id = req.params;
-    console.log("ID: ", id);
 
     if (!contacts || !opportunity) {
       res

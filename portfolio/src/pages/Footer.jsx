@@ -5,10 +5,13 @@ import iconMap from "../utils/iconMap";
 
 const Footer = () => {
   const [footer, setFooter] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const GetFooterSection = async () => {
       try {
+        setLoading(true);
+
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/footer-section`,
         );
@@ -17,6 +20,8 @@ const Footer = () => {
         console.log("footer: ", res.data.footer);
       } catch (error) {
         console.log("Get footer error: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -50,7 +55,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   aria-label={social?.title}
                   title={social?.title}
-                   className="rounded-lg border border-slate-800 p-3 text-slate-400 transition-colors hover:border-blue-400/50 hover:bg-blue-400/10 hover:text-blue-400"
+                  className="rounded-lg border border-slate-800 p-3 text-slate-400 transition-colors hover:border-blue-400/50 hover:bg-blue-400/10 hover:text-blue-400"
                 >
                   {Icon && <Icon className="h-5 w-5" />}
                 </a>

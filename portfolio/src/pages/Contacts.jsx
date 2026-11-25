@@ -8,10 +8,13 @@ import { FiArrowUpRight, FiBriefcase } from "react-icons/fi";
 
 const Contacts = () => {
   const [contacts, setContacts] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const GetContactsSection = async () => {
       try {
+        setLoading(true);
+
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/contacts-section`,
         );
@@ -19,6 +22,8 @@ const Contacts = () => {
         setContacts(res.data.contacts);
       } catch (error) {
         console.log("Get contacts error: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 

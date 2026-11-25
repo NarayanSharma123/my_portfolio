@@ -6,10 +6,13 @@ import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
 
 const Projects = () => {
   const [projects, setProjects] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const GetProjectsSection = async () => {
       try {
+        setLoading(true);
+
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/portfolio/projects-section`,
         );
@@ -17,6 +20,8 @@ const Projects = () => {
         setProjects(res.data.projects);
       } catch (error) {
         console.log("Get projects error: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 

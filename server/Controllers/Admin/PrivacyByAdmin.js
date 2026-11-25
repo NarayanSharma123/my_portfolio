@@ -30,7 +30,6 @@ export const AddPrivacyByAdmin = async (req, res) => {
     const { sections } = req.body;
 
     const id = req.params;
-    console.log("ID: ", id);
 
     if (!sections) {
       res
